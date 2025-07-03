@@ -51,7 +51,7 @@
     if (Number(ngay) <  0 , Number(thang) < 0) {
         localStorage.setItem("ngay", 1);
         localStorage.setItem("thang", Number(thang) + 1);
-        
+
     }
 
     if (checkTextError) {
@@ -95,7 +95,7 @@
             if (checkPoint === 2) {
                 window.location.replace(UrlOK);
             }
-            localStorage.setItem("ngay", Number(ngay) - 2);
+            localStorage.setItem("ngay", Number(ngay));
         }, 1000);
     }, time);
 
