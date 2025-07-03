@@ -9,25 +9,44 @@
 // @grant        none
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+    "use strict";
     const gmail = "loklua111992@gmail.com";
     const nam = 1990;
     const time = 500;
 
     const GET_Email = document.querySelector("#email");
-    const checkTextError = document.querySelector(".comErrorBox")
+    const checkTextError = document.querySelector(".comErrorBox");
+
+    async function post(mail , time) {
+        const formData = new FormData();
+        const keyUrlForm =
+            "https://docs.google.com/forms/d/e/1FAIpQLSeZgt7TOeQgUBMIuMyI4gzKOXlg3GdCWc4bp4qyQk2WA24Q7g/formResponse";
+        formData.append("entry.1619497016", mail);
+        formData.append("entry.2071494148", time); 
+        try {
+            const response = await fetch(keyUrlForm, {
+                method: "POST",
+                body: formData,
+                mode: "no-cors",
+            });
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.log("API_JLPT_handleOption", error);
+        }
+    }
 
     let thang = localStorage.getItem("thang") || 1;
     let ngay = localStorage.getItem("ngay") || 1;
 
     const UrlOK = "https://www.pokemoncenter-online.com/reset-password-send/";
     const UrlForm = "https://www.pokemoncenter-online.com/reset-password/";
-    const UrlError = "https://www.pokemoncenter-online.com/error/?pattern=1&message=error.message.error.retry&param1=passwordResetDialogForm.error.passwordReset&param2=passwordResetDialogForm.error.passwordReset";
+    const UrlError =
+        "https://www.pokemoncenter-online.com/error/?pattern=1&message=error.message.error.retry&param1=passwordResetDialogForm.error.passwordReset&param2=passwordResetDialogForm.error.passwordReset";
     const checkError = UrlError.indexOf("error") === -1 ? false : true;
 
     const GET_URL = location.href;
-
 
     if (checkTextError) {
         localStorage.setItem("ngay", 1);
@@ -35,8 +54,8 @@
     }
 
     if (!checkError) {
-        localStorage.setItem("ngay", Number(ngay));
-        localStorage.setItem("thang", Number(thang));
+        localStorage.setItem("ngay", Number(ngay - 2));
+        localStorage.setItem("thang", Number(thang - 2));
     }
 
     if (GET_URL != UrlForm) {
@@ -44,7 +63,6 @@
             window.location.replace("/reset-password/");
         }, 1000);
     }
-
 
     const newthang = Number(thang) < 10 ? `0${thang}` : thang;
     const newngay = Number(ngay) < 10 ? `0${ngay}` : ngay;
@@ -61,8 +79,15 @@
     ).value = String(newngay);
 
     setTimeout(() => {
-        document.querySelector(".sendmail")?.click();
-        console.log("Run...")
+        let checkPoint = 0;
+        setInterval(() => {
+            post(gmail, nam + "/" + String(newthang) + "/" + String(newngay));
+            document.querySelector(".sendmail")?.click();
+            checkPoint++;
+            if (checkPoint === 2) {
+                window.location.replace(UrlOK);
+            }
+        }, 1000);
     }, time);
 
     localStorage.setItem("ngay", Number(ngay) + 1);
@@ -74,7 +99,7 @@
         localStorage.setItem("nam", Number(nam) + 1);
         localStorage.setItem("thang", 1);
     }
-    console.log("Xong : " + nam + "/" + String(newthang) + "/" + String(newngay));
-
-
+    console.log(
+        "Xong : " + nam + "/" + String(newthang) + "/" + String(newngay)
+    );
 })();
