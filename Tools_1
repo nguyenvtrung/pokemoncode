@@ -48,6 +48,12 @@
 
     const GET_URL = location.href;
 
+    if (Number(ngay) <  0 , Number(thang) < 0) {
+        localStorage.setItem("ngay", 1);
+        localStorage.setItem("thang", Number(thang) + 1);
+        
+    }
+
     if (checkTextError) {
         localStorage.setItem("ngay", 1);
         localStorage.setItem("thang", Number(thang) + 1);
