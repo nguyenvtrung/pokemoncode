@@ -54,8 +54,8 @@
     }
 
     if (!checkError) {
-        localStorage.setItem("ngay", Number(ngay) - 2);
-        localStorage.setItem("thang", Number(thang) - 2);
+        localStorage.setItem("ngay", Number(ngay));
+        localStorage.setItem("thang", Number(thang) );
         window.location.replace("/reset-password/");
         return
     }
