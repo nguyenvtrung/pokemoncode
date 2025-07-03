@@ -1,0 +1,80 @@
+// ==UserScript==
+// @name         Tool Pokemon
+// @namespace    http://tampermonkey.net/
+// @version      2025-07-03
+// @description  try to take over the world!
+// @author       You
+// @match        https://www.pokemoncenter-online.com/*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=pokemoncenter-online.com
+// @grant        none
+// ==/UserScript==
+
+(function() {
+    'use strict';
+    const gmail = "loklua111992@gmail.com";
+    const nam = 1990;
+    const time = 500;
+
+    const GET_Email = document.querySelector("#email");
+    const checkTextError = document.querySelector(".comErrorBox")
+
+    let thang = localStorage.getItem("thang") || 1;
+    let ngay = localStorage.getItem("ngay") || 1;
+
+    const UrlOK = "https://www.pokemoncenter-online.com/reset-password-send/";
+    const UrlForm = "https://www.pokemoncenter-online.com/reset-password/";
+    const UrlError = "https://www.pokemoncenter-online.com/error/?pattern=1&message=error.message.error.retry&param1=passwordResetDialogForm.error.passwordReset&param2=passwordResetDialogForm.error.passwordReset";
+    const checkError = UrlError.indexOf("error") === -1 ? false : true;
+
+    const GET_URL = location.href;
+
+
+    if (checkTextError) {
+        localStorage.setItem("ngay", 1);
+        localStorage.setItem("thang", Number(thang) + 1);
+    }
+
+    if (!checkError) {
+        localStorage.setItem("ngay", Number(ngay));
+        localStorage.setItem("thang", Number(thang));
+    }
+
+    if (GET_URL != UrlForm) {
+        setTimeout(() => {
+            window.location.replace("/reset-password/");
+        }, 1000);
+    }
+
+
+    const newthang = Number(thang) < 10 ? `0${thang}` : thang;
+    const newngay = Number(ngay) < 10 ? `0${ngay}` : ngay;
+
+    GET_Email.value = gmail;
+    document.querySelector(
+        "select[name='dwfrm_profile_customer_birthdayyear']"
+    ).value = nam;
+    document.querySelector(
+        "select[name='dwfrm_profile_customer_birthdaymonth']"
+    ).value = String(newthang);
+    document.querySelector(
+        "select[name='dwfrm_profile_customer_birthdayday']"
+    ).value = String(newngay);
+
+    setTimeout(() => {
+        document.querySelector(".sendmail")?.click();
+        console.log("Run...")
+    }, time);
+
+    localStorage.setItem("ngay", Number(ngay) + 1);
+    if (localStorage.getItem("ngay") >= 31) {
+        localStorage.setItem("thang", Number(thang) + 1);
+        localStorage.setItem("ngay", 1);
+    }
+    if (localStorage.getItem("thang") > 12) {
+        localStorage.setItem("nam", Number(nam) + 1);
+        localStorage.setItem("thang", 1);
+    }
+    console.log("Xong : " + nam + "/" + String(newthang) + "/" + String(newngay));
+
+
+})();
